@@ -105,14 +105,14 @@ export class GameComponent implements OnInit, OnDestroy
             break;
     }
 
-
+  }
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
 
     /**
      * Finish the horizontal stepper
-     */
+     
 
     async finishHorizontalStepper()
     {
@@ -161,5 +161,6 @@ export class GameComponent implements OnInit, OnDestroy
        });
         alert('You have finished the horizontal stepper!');
     }
+*/
 
 }
