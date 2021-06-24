@@ -72,13 +72,15 @@ module.exports.routes = {
  'GET /campaign/countUserCampaigns': {action:'campaign/count-user-campaigns'},
 
  //Marker Routes
- 'POST /marker/create': { action: 'marker/create' },
+ 'POST /marker/create':  'MarkerController.create' ,
  'PATCH /marker/update': { action: 'marker/update' },
  'GET /marker/get-all': { action: 'marker/get-all' },
  'DELETE /marker/delete': { action: 'marker/delete' },
  'POST /marker/asociate-images': { action: 'marker/asociate-images' },
-
-
+ 'POST /game/create':  'GameController.create' ,
+ 'PATCH /game/edit':  'GameController.edit' ,
+ 'DELETE /game/delete':  'GameController.delete' ,
+ 'GET /game/get':  'GameController.getGame' ,
 
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗

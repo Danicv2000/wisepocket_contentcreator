@@ -7,14 +7,64 @@ import { Campaign } from '../../../models/campaign.model';
 import { Imagen } from '../../../models/image.model';
 import { FileUploadService } from '../../../services/file-upload.service';
 // import { FuseTranslationLoaderService } from '@fuse/services/translation-loader.service';
-
+import { GamesService } from "../../../services/games.service";
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit, OnDestroy 
+export class GameComponent implements OnInit, OnDestroy
 {
+addGames:any = {Games: '',Questions: ''}
+
+games:any;
+
+
+
+obtenerGame(){
+this.gamesService.obtenerList().subscribe(resultado=>{
+this.games=resultado.games;
+},
+error=>{
+console.log(JSON.stringify(error));
+});
+}
+
+
+
+
+editGame(){
+
+
+}
+
+
+deleteGame(identificador){
+console.log('event delete')
+
+this.gamesService.deleteGame(identificador).subscribe(resultado=>{
+  this.obtenerGame;
+  },
+  error=>{
+  console.log(JSON.stringify(error));
+  });
+
+}
+
+addGame(){
+  console.log('event add')
+this.gamesService.addGame(this.addGames).subscribe(resultado=>{
+  this.obtenerGame();
+  },
+  error=>{
+  console.log(JSON.stringify(error));
+  });
+}
+
+
+
+
+
   form: FormGroup;
 
   horizontalStepperStep1: FormGroup;
@@ -23,22 +73,24 @@ export class GameComponent implements OnInit, OnDestroy
   readonly maxSize = 104857600;
   gameicon: string = 'gameicon';
  @ViewChild('fileDorp', {static: false}) inputFile: ElementRef;
-  
+
   private _unsubscribeAll: Subject<any>;
-  files: File[] = []; 
+  files: File[] = [];
   gameIconf: File = undefined;
   image1: File = undefined;
   image2: File = undefined;
   image3: File = undefined;
   image4: File = undefined;
-  
+
   constructor(
     private _formBuilder: FormBuilder,
     // private _fuseTranslationLoaderService: FuseTranslationLoaderService
+    private gamesService: GamesService,
 
-  ) 
+
+  )
   {
-
+this.obtenerGame();
     // Load the translations
     // this._fuseTranslationLoaderService.loadTranslations(english, spanish);
 
@@ -47,14 +99,14 @@ export class GameComponent implements OnInit, OnDestroy
 
   }
 
-  ngOnInit(): void 
+  ngOnInit(): void
   {
     this.horizontalStepperStep1 = this._formBuilder.group({
       nameGame     : ['', Validators.required],
       cant_preg    : ['',[ Validators.required, Validators.maxLength(20)]],
       cant_resp    : ['', Validators.required]
     });
-    
+
     this.horizontalStepperStep2 = this._formBuilder.group({
       redacte      : ['', Validators.required],
       redacte1     : ['', Validators.required],
@@ -62,8 +114,12 @@ export class GameComponent implements OnInit, OnDestroy
       redacte3     : ['', Validators.required],
       redacte4     : ['', Validators.required]
     });
+
+
+
+
   }
-  
+
 
   onChage(event){
     console.log(event);
@@ -106,61 +162,12 @@ export class GameComponent implements OnInit, OnDestroy
     }
 
   }
+
+
+
+
+
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Finish the horizontal stepper
-     
-
-    async finishHorizontalStepper()
-    {
-        let dataCamp = new Campaign()
-        dataCamp.titulo = this.horizontalStepperStep1.get('nameCampaign').value;
-        dataCamp.descripcion = this.horizontalStepperStep1.get('description').value;
-        dataCamp.phone= this.horizontalStepperStep2.get('phone').value;
-        dataCamp.contactoEmail = this.horizontalStepperStep2.get('email').value;
-        dataCamp.direccionPostal = this.horizontalStepperStep2.get('postalCode').value;
-        dataCamp.colorPrincipal = this.horizontalStepperStep3.get('primaryColor').value;
-        dataCamp.colorSecundario = this.horizontalStepperStep3.get('secondaryColor').value;
-        dataCamp.country = this.horizontalStepperStep3.get('countries').value;
-        dataCamp.city = this.horizontalStepperStep3.get('cities').value;
-        dataCamp.state = this.horizontalStepperStep3.get('states').value;
-        dataCamp.contactoWhatsapp = this.horizontalStepperStep2.get('phone').value;
-        dataCamp.contactoFacebook = this.horizontalStepperStep2.get('website').value;
-        dataCamp.contactoTelegram = this.horizontalStepperStep2.get('website').value;
-        if(this.campIconf){
-            console.log(this.campIconf);
-            await this.imageService.addImage(this.campIconf).then(img=>{
-                console.log(img);
-                //let data = img['data'];
-                dataCamp.logo = img[0];
-            });
-        }
-        let imagesCarruselIds = [];
-        if(this.files.length>0){
-            await this.imageService.addImage(this.files)
-            .then((img)=>{
-                console.log(img);
-                let data = img['data'];
-                imagesCarruselIds = img
-                //dataCamp.carrusel = img;
-            });
-        }
-        console.log(dataCamp);
-        await this.campService.addCampaign(dataCamp)
-       .pipe(takeUntil(this._unsubscribeAll))
-       .subscribe(async campaign =>{
-           if(imagesCarruselIds.length>0){
-            await this.campService.asociateImages(imagesCarruselIds,campaign.id);
-           }
-           console.log(campaign);
-        },error=>{
-           console.log(error)
-       });
-        alert('You have finished the horizontal stepper!');
-    }
-*/
-
 }
